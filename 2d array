@@ -1,1 +1,43 @@
+#include <stdio.h>
+
+#define ROWS 6
+#define COLS 6
+
+// Function to input values into a 2D array
+void inputArray(int arr[ROWS][COLS]) {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            printf("Enter value for element [%d][%d]: ", i, j);
+            scanf("%d", &arr[i][j]);
+        }
+    }
+}
+
+// Function to calculate the sum of all elements in a 2D array
+int sumAllElements(int arr[ROWS][COLS]) {
+    int totalSum = 0;
+
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            totalSum += arr[i][j];
+        }
+    }
+
+    return totalSum;
+}
+
+int main() {
+    int arr[ROWS][COLS];
+
+    // Input values for the 2D array
+    inputArray(arr);
+
+    // Calculating the sum of all elements
+    int result = sumAllElements(arr);
+
+    // Printing the result
+    printf("The sum of all elements is: %d\n", result);
+
+    return 0;
+}
 
