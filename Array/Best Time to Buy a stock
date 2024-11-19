@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <limits.h>
+
+// Function to find the maximum profit
+int maxProfit(int prices[], int n) {
+    int minPrice = INT_MAX; // Initialize the minimum price
+    int maxProfit = 0;      // Initialize the maximum profit
+
+    for (int i = 0; i < n; i++) {
+        if (prices[i] < minPrice) {
+            minPrice = prices[i]; // Update the minimum price
+        } else if (prices[i] - minPrice > maxProfit) {
+            maxProfit = prices[i] - minPrice; // Update the maximum profit
+        }
+    }
+
+    return maxProfit;
+}
+
+int main() {
+    int n;
+
+    // Input array size
+    printf("Enter the number of days: ");
+    scanf("%d", &n);
+
+    int prices[n];
+
+    // Input prices
+    printf("Enter the stock prices for %d days:\n", n);
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &prices[i]);
+    }
+
+    // Find the maximum profit
+    int profit = maxProfit(prices, n);
+
+    // Output result
+    printf("The maximum profit is: %d\n", profit);
+
+    return 0;
+}
