@@ -1,0 +1,45 @@
+#include <stdio.h>
+
+void iterativeBinarySearch(int arr[], int n, int target) {
+    int left = 0, right = n - 1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2; // To avoid overflow
+
+        if (arr[mid] == target) {
+            printf("Element %d found at index %d (position %d).\n", target, mid, mid + 1);
+            return;
+        } else if (arr[mid] < target) {
+            left = mid + 1; // Search in the right half
+        } else {
+            right = mid - 1; // Search in the left half
+        }
+    }
+
+    printf("Element %d not found in the array.\n", target);
+}
+
+int main() {
+    int n, target, i;
+
+    // Taking input for the size of the array
+    printf("Enter the number of elements in the array: ");
+    scanf("%d", &n);
+
+    int arr[n];
+
+    // Taking input for sorted array elements
+    printf("Enter %d elements of the sorted array:\n", n);
+    for (i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    // Taking input for the element to search
+    printf("Enter the element to search: ");
+    scanf("%d", &target);
+
+    // Call the iterative binary search function
+    iterativeBinarySearch(arr, n, target);
+
+    return 0;
+}
