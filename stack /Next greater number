@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define a stack structure
+typedef struct {
+    int *arr;
+    int top;
+    int capacity;
+} Stack;
+
+// Function to create a stack
+Stack* createStack(int capacity) {
+    Stack* stack = (Stack*)malloc(sizeof(Stack));
+    stack->capacity = capacity;
+    stack->top = -1;
+    stack->arr = (int*)malloc(capacity * sizeof(int));
+    return stack;
+}
+
+// Function to check if the stack is empty
+int isEmpty(Stack* stack) {
+    return stack->top == -1;
+}
+
+// Function to push an element onto the stack
+void push(Stack* stack, int value) {
+    stack->arr[++stack->top] = value;
+}
+
+// Function to pop an element from the stack
+int pop(Stack* stack) {
+    if (isEmpty(stack)) {
+        return -1;
+    }
+    return stack->arr[stack->top--];
+}
+
+// Function to get the top element of the stack
+int top(Stack* stack) {
+    if (isEmpty(stack)) {
+        return -1;
+    }
+    return stack->arr[stack->top];
+}
+
+// Function to find the Next Greater Elements
+void nextGreaterElements(int arr[], int n) {
+    Stack* stack = createStack(n);  // Create a stack
+    int nge[n];                     // Array to store the NGE results
+
+    // Traverse the array from right to left
+    for (int i = n - 1; i >= 0; i--) {
+        // Remove elements smaller than or equal to the current element
+        while (!isEmpty(stack) && top(stack) <= arr[i]) {
+            pop(stack);
+        }
+
+        // If stack is empty, no greater element exists
+        nge[i] = isEmpty(stack) ? -1 : top(stack);
+
+        // Push the current element onto the stack
+        push(stack, arr[i]);
+    }
+
+    // Print the results
+    printf("Next Greater Elements:\n");
+    for (int i = 0; i < n; i++) {
+        printf("%d -> %d\n", arr[i], nge[i]);
+    }
+
+    // Free the stack memory
+    free(stack->arr);
+    free(stack);
+}
+
+// Main function
+int main() {
+    int arr[] = {4, 5, 2, 25, 7};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    nextGreaterElements(arr, n);
+
+    return 0;
+}
