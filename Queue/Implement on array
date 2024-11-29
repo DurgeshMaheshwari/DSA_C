@@ -1,0 +1,86 @@
+#include <stdio.h>
+#define SIZE 10 // Define the size of the queue
+
+// Define the queue structure
+typedef struct {
+    int items[SIZE];
+    int front;
+    int rear;
+} Queue;
+
+// Initialize the queue
+void initializeQueue(Queue *q) {
+    q->front = -1;
+    q->rear = -1;
+}
+
+// Check if the queue is full
+int isFull(Queue *q) {
+    return (q->rear == SIZE - 1);
+}
+
+// Check if the queue is empty
+int isEmpty(Queue *q) {
+    return (q->front == -1 || q->front > q->rear);
+}
+
+// Enqueue operation
+void enqueue(Queue *q, int value) {
+    if (isFull(q)) {
+        printf("Queue is full. Cannot enqueue %d\n", value);
+        return;
+    }
+    if (isEmpty(q)) {
+        q->front = 0;
+    }
+    q->rear++;
+    q->items[q->rear] = value;
+    printf("%d enqueued to the queue\n", value);
+}
+
+// Dequeue operation
+int dequeue(Queue *q) {
+    if (isEmpty(q)) {
+        printf("Queue is empty. Cannot dequeue\n");
+        return -1;
+    }
+    int value = q->items[q->front];
+    q->front++;
+    if (q->front > q->rear) {
+        // Reset queue when empty
+        q->front = -1;
+        q->rear = -1;
+    }
+    printf("%d dequeued from the queue\n", value);
+    return value;
+}
+
+// Peek operation
+int peek(Queue *q) {
+    if (isEmpty(q)) {
+        printf("Queue is empty. No front element\n");
+        return -1;
+    }
+    printf("Front element is %d\n", q->items[q->front]);
+    return q->items[q->front];
+}
+
+// Main function to demonstrate the queue
+int main() {
+    Queue q;
+    initializeQueue(&q);
+
+    // Perform queue operations
+    enqueue(&q, 10);
+    enqueue(&q, 20);
+    enqueue(&q, 30);
+    peek(&q);
+    dequeue(&q);
+    peek(&q);
+    enqueue(&q, 40);
+    dequeue(&q);
+    dequeue(&q);
+    dequeue(&q); // Attempt to dequeue from empty queue
+
+    return 0;
+}
