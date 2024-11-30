@@ -1,0 +1,120 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+
+#define MAX 100
+
+// A queue node to store a board position and the distance from the start
+typedef struct QueueNode {
+    int position;
+    int distance;
+} QueueNode;
+
+// A queue data structure
+typedef struct Queue {
+    QueueNode* array[MAX];
+    int front, rear;
+} Queue;
+
+// Function to create a queue
+Queue* createQueue() {
+    Queue* q = (Queue*)malloc(sizeof(Queue));
+    q->front = q->rear = -1;
+    return q;
+}
+
+// Function to check if the queue is empty
+int isEmpty(Queue* q) {
+    return q->front == -1;
+}
+
+// Function to enqueue a node
+void enqueue(Queue* q, int position, int distance) {
+    QueueNode* newNode = (QueueNode*)malloc(sizeof(QueueNode));
+    newNode->position = position;
+    newNode->distance = distance;
+    if (isEmpty(q)) {
+        q->front = q->rear = 0;
+    } else {
+        q->rear++;
+    }
+    q->array[q->rear] = newNode;
+}
+
+// Function to dequeue a node
+QueueNode* dequeue(Queue* q) {
+    if (isEmpty(q)) {
+        return NULL;
+    }
+    QueueNode* temp = q->array[q->front];
+    if (q->front == q->rear) {
+        q->front = q->rear = -1;
+    } else {
+        q->front++;
+    }
+    return temp;
+}
+
+// Function to find the minimum number of dice throws to reach the end
+int snakeAndLadder(int board[], int size) {
+    // Array to track visited positions
+    int visited[MAX] = {0};
+    
+    // Create a queue for BFS
+    Queue* queue = createQueue();
+    
+    // Start from the first cell
+    visited[0] = 1;
+    enqueue(queue, 0, 0); // position 0, distance 0
+    
+    // BFS loop
+    while (!isEmpty(queue)) {
+        QueueNode* current = dequeue(queue);
+        int pos = current->position;
+        int dist = current->distance;
+        
+        // If we reach the last cell, return the distance
+        if (pos == size - 1) {
+            return dist;
+        }
+        
+        // Explore all possible dice throws (1 to 6)
+        for (int i = 1; i <= 6; i++) {
+            int nextPos = pos + i;
+            if (nextPos < size && !visited[nextPos]) {
+                visited[nextPos] = 1;
+                // If there's a snake or ladder, move accordingly
+                int finalPos = board[nextPos] != -1 ? board[nextPos] : nextPos;
+                enqueue(queue, finalPos, dist + 1);
+            }
+        }
+        free(current);
+    }
+    return INT_MAX; // If no path is found
+}
+
+int main() {
+    int n = 30; // Size of the board
+    int board[MAX];
+    
+    // Initialize the board with -1 (no snake or ladder)
+    for (int i = 0; i < n; i++) {
+        board[i] = -1;
+    }
+    
+    // Ladders
+    board[2] = 21;
+    board[4] = 7;
+    board[10] = 25;
+    board[19] = 28;
+    
+    // Snakes
+    board[26] = 0;
+    board[20] = 8;
+    board[16] = 3;
+    board[18] = 6;
+    
+    printf("Minimum dice throws required: %d\n", snakeAndLadder(board, n));
+    
+    return 0;
+}
