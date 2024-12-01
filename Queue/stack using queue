@@ -1,0 +1,111 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define MAX 100
+
+// Define a Queue
+typedef struct {
+    int items[MAX];
+    int front, rear;
+} Queue;
+
+// Initialize a Queue
+void initQueue(Queue* q) {
+    q->front = q->rear = -1;
+}
+
+// Check if the Queue is empty
+bool isEmpty(Queue* q) {
+    return (q->front == -1);
+}
+
+// Enqueue operation
+void enqueue(Queue* q, int value) {
+    if (q->rear == MAX - 1) {
+        printf("Queue overflow\n");
+        return;
+    }
+    if (q->front == -1) {
+        q->front = 0;
+    }
+    q->rear++;
+    q->items[q->rear] = value;
+}
+
+// Dequeue operation
+int dequeue(Queue* q) {
+    if (isEmpty(q)) {
+        printf("Queue underflow\n");
+        return -1;
+    }
+    int data = q->items[q->front];
+    q->front++;
+    if (q->front > q->rear) {
+        q->front = q->rear = -1; // Reset the queue
+    }
+    return data;
+}
+
+// Peek operation
+int peek(Queue* q) {
+    if (isEmpty(q)) {
+        printf("Queue is empty\n");
+        return -1;
+    }
+    return q->items[q->front];
+}
+
+// Stack using two queues
+typedef struct {
+    Queue q1, q2;
+} Stack;
+
+// Initialize a Stack
+void initStack(Stack* stack) {
+    initQueue(&stack->q1);
+    initQueue(&stack->q2);
+}
+
+// Push operation
+void push(Stack* stack, int value) {
+    enqueue(&stack->q2, value);
+    while (!isEmpty(&stack->q1)) {
+        enqueue(&stack->q2, dequeue(&stack->q1));
+    }
+
+    // Swap q1 and q2
+    Queue temp = stack->q1;
+    stack->q1 = stack->q2;
+    stack->q2 = temp;
+}
+
+// Pop operation
+int pop(Stack* stack) {
+    if (isEmpty(&stack->q1)) {
+        printf("Stack underflow\n");
+        return -1;
+    }
+    return dequeue(&stack->q1);
+}
+
+// Peek operation
+int top(Stack* stack) {
+    return peek(&stack->q1);
+}
+
+// Main function to test the Stack
+int main() {
+    Stack stack;
+    initStack(&stack);
+
+    push(&stack, 10);
+    push(&stack, 20);
+    push(&stack, 30);
+
+    printf("Top element: %d\n", top(&stack)); // Output: 30
+    printf("Popped element: %d\n", pop(&stack)); // Output: 30
+    printf("Top element after pop: %d\n", top(&stack)); // Output: 20
+
+    return 0;
+}
