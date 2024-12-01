@@ -4,7 +4,7 @@
 
 #define MAX 100
 
-// A queue node to store a board position and the distance from the start
+// A queue node too store a board position and the distance from the start
 typedef struct QueueNode {
     int position;
     int distance;
