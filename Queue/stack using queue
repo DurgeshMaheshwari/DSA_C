@@ -33,7 +33,7 @@ void enqueue(Queue* q, int value) {
     q->items[q->rear] = value;
 }
 
-// Dequeue operation
+// Dequeue operations
 int dequeue(Queue* q) {
     if (isEmpty(q)) {
         printf("Queue underflow\n");
