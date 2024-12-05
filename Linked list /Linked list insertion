@@ -1,4 +1,4 @@
-// C Program to insert the node at the beginning of
+// C Program to insert the node at the beginning 
 // Linked List
 #include <stdio.h>
 #include <stdlib.h>
