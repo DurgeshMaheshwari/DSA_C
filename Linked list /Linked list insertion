@@ -1,5 +1,5 @@
 // C Program to insert the node at the beginning 
-// Linked List
+// Linked Lists
 #include <stdio.h>
 #include <stdlib.h>
 
